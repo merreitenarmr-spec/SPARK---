@@ -1,0 +1,71 @@
+ </html><!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صفحة المنتج</title>
+<style>
+:root {
+  --bg-color:#fff; --text-color:#000;
+}
+body.dark {
+  --bg-color:#121212; --text-color:#fff;
+}
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  margin:0;
+}
+.container { padding:20px; max-width:500px; margin:auto; }
+h1 { text-align:center; }
+.product-options { display:flex; justify-content:space-between; margin:15px 0; }
+button { cursor:pointer; padding:5px 10px; }
+</style>
+</head>
+<body>
+<h1>منتج 1</h1>
+<div class="container">
+  <div class="product-options">
+    <div>
+      <label>المقاس:</label><br>
+      <select id="size">
+        <option value="">اختر المقاس</option>
+        <option>S</option>
+        <option>M</option>
+        <option>L</option>
+        <option>XL</option>
+        <option>10</option>
+        <option>12</option>
+      </select>
+    </div>
+    <div>
+      <label>اللون:</label><br>
+      <select id="color">
+        <option value="">اختر اللون</option>
+        <option>أبيض</option>
+        <option>أسود</option>
+        <option>بينك</option>
+      </select>
+    </div>
+  </div>
+  <button onclick="addToCart()">أضف للعربة</button>
+  <button onclick="toggleMode()" style="margin-left:10px;">🌙 / ☀️</button>
+</div>
+
+<script>
+let cart = [];
+function toggleMode(){ document.body.classList.toggle('dark'); }
+
+function addToCart(){
+  const size = document.getElementById('size').value;
+  const color = document.getElementById('color').value;
+  if(!size || !color){ alert('يرجى اختيار المقاس واللون أولاً!'); return; }
+  let item = {name:'منتج 1', size, color, quantity:1};
+  cart.push(item);
+  alert('تم إضافة المنتج للعربة!');
+  console.log(cart);
+}
+</script>
+</body>
+</html>

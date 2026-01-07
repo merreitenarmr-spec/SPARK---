@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الرئيسية</title>
+<style>
+:root {
+  --bg-color: #fff;
+  --text-color: #000;
+}
+body.dark {
+  --bg-color: #121212;
+  --text-color: #fff;
+}
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  margin:0;
+}
+header {
+  display:flex; justify-content: space-between; align-items:center; padding:10px 20px; background:#444; color:#fff;
+}
+button { cursor:pointer; }
+.products { display:flex; flex-wrap:wrap; gap:20px; padding:20px; }
+.product { border:1px solid #ccc; padding:10px; width:200px; text-align:center; }
+.cart-button {
+  position:fixed; top:20px; right:20px; background:#ff6600; color:#fff; border:none; padding:10px 15px;
+}
+.mode-button {
+  position:fixed; top:20px; left:20px; background:#666; color:#fff; border:none; padding:10px 15px;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>متجري</h1>
+</header>
+
+<button class="mode-button" onclick="toggleMode()">🌙 / ☀️</button>
+<button class="cart-button" onclick="toggleCart()">🛒 العربة (<span id="cart-count">0</span>)</button>
+
+<div class="products" id="products">
+  <div class="product" data-name="Product 1">
+    <h3>منتج 1</h3>
+    <p>السعر: 100 ج</p>
+    <select class="size">
+      <option value="">اختر المقاس</option>
+      <option>S</option><option>M</option><option>L</option><option>XL</option><option>10</option><option>12</option>
+    </select>
+    <select class="color">
+      <option value="">اختر اللون</option>
+      <option>أبيض</option><option>أسود</option><option>بينك</option>
+    </select>
+    <button onclick="addToCart(this)">أضف للعربة</button>
+  </div>
+  <div class="product" data-name="Product 2">
+    <h3>منتج 2</h3>
+    <p>السعر: 150 ج</p>
+    <select class="size">
+      <option value="">اختر المقاس</option>
+      <option>S</option><option>M</option><option>L</option><option>XL</option><option>10</option><option>12</option>
+    </select>
+    <select class="color">
+      <option value="">اختر اللون</option>
+      <option>أبيض</option><option>أسود</option><option>بينك</option>
+    </select>
+    <button onclick="addToCart(this)">أضف للعربة</button>
+  </div>
+</div>
+
+<div id="cart" style="position:fixed; top:60px; right:20px; width:300px; max-height:400px; overflow:auto; background:#fff; border:1px solid #ccc; padding:10px; display:none;">
+  <h3>عربة التسوق</h3>
+  <ul id="cart-items"></ul>
+  <a href="checkout.html"><button style="margin-top:10px;">الدفع</button></a>
+</div>
+
+<script>
+let cart = [];
+
+function toggleMode(){
+  document.body.classList.toggle('dark');
+}
+
+function toggleCart(){
+  const cartDiv = document.getElementById('cart');
+  cartDiv.style.display = cartDiv.style.display === 'none' ? 'block' : 'none';
+}
+
+function addToCart(btn){
+  const product = btn.parentElement;
+  const name = product.dataset.name;
+  const size = product.querySelector('.size').value;
+  const color = product.querySelector('.color').value;
+
+  if(!size || !color){
+    alert('يرجى اختيار المقاس واللون أولاً!');
+    return;
+  }
+
+  let item = {name, size, color, quantity:1};
+  cart.push(item);
+  updateCart();
+}
+
+function updateCart(){
+  const list = document.getElementById('cart-items');
+  list.innerHTML = '';
+  cart.forEach((item, index)=>{
+    list.innerHTML += `<li>${item.name} - ${item.size} - ${item.color} 
+      <button onclick="changeQty(${index},-1)">-</button>
+      ${item.quantity}
+      <button onclick="changeQty(${index},1)">+</button>
+    </li>`;
+  });
+  document.getElementById('cart-count').innerText = cart.length;
+}
+
+function changeQty(index, delta){
+  cart[index].quantity += delta;
+  if(cart[index].quantity < 1) cart[index].quantity = 1;
+  updateCart();
+}
+</script>
+
+</body>
+</html>
